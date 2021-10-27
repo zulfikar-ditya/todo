@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\todoController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,10 +15,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', [todoController::class, 'index'])->name('index');
+
+Route::middleware(['auth'])->group(function () {
+    Route::post('/create', [todoController::class, 'store'])->name('todo.store');
+    Route::delete('/delete/{id}', [todoController::class, 'destroy'])->name('todo.destroy');
 });
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', function () {
+    return redirect()->route('index');
+})->name('home');
