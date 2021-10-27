@@ -13,7 +13,7 @@ class todoController extends Controller
         if (Auth::check()) {
             $data = Todo::where('user_id', Auth::user()->id)->orderBy('created_at', 'desc')->paginate(20);
         } else {
-            $data = null;
+            $data = [];
         }
         return view('frontend.index', compact('data'));
     }
